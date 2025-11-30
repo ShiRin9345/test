@@ -30,6 +30,7 @@ async function getProducts(): Promise<Product[]> {
 
 export default async function Home() {
   const products = await getProducts();
+  console.log(products);
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
