@@ -1,7 +1,9 @@
 import Image from "next/image";
 
 // 强制动态渲染，避免构建时获取数据
+// 明确告诉 Next.js 这个路由完全在运行时生成，不在构建时预渲染
 export const dynamic = "force-dynamic";
+export const revalidate = 0; // 禁用静态生成和缓存
 
 interface Product {
   id: number;
@@ -18,13 +20,10 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
+    // 在 force-dynamic 模式下，fetch 默认就是动态的
+    // 不需要额外的 cache 配置，让 Next.js 在运行时获取数据
     const res = await fetch("https://fakestoreapi.com/products", {
-      method: "GET",
-      next: { revalidate: 60 }, // 每60秒重新验证
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // 不设置任何缓存选项，在 force-dynamic 模式下会自动在运行时获取
     });
 
     if (!res.ok) {
