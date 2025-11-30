@@ -1,5 +1,8 @@
 import Image from "next/image";
 
+// 强制动态渲染，避免构建时获取数据
+export const dynamic = "force-dynamic";
+
 interface Product {
   id: number;
   title: string;
@@ -15,20 +18,30 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const res = await fetch("https://fakestoreapi.com/products");
+    const res = await fetch("https://fakestoreapi.com/products", {
+      next: { revalidate: 60 }, // 每60秒重新验证
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
     if (!res.ok) {
-      throw new Error("Failed to fetch products");
+      throw new Error(
+        `Failed to fetch products: ${res.status} ${res.statusText}`
+      );
     }
-    return res.json();
+
+    const data = await res.json();
+    return data;
   } catch (error) {
     console.error("Error fetching products:", error);
+    // 返回空数组而不是抛出错误，这样页面仍然可以渲染
     return [];
   }
 }
 
 export default async function Home() {
   const products = await getProducts();
-  console.log(products);
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
