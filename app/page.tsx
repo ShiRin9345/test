@@ -19,9 +19,11 @@ interface Product {
 async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch("https://fakestoreapi.com/products", {
+      method: "GET",
       next: { revalidate: 60 }, // 每60秒重新验证
+      credentials: "include",
       headers: {
-        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
 
