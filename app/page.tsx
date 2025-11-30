@@ -37,7 +37,7 @@ export default async function Home() {
         <h1 className="mb-8 text-4xl font-bold text-black dark:text-zinc-50">
           产品列表
         </h1>
-        
+
         {products.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg text-zinc-600 dark:text-zinc-400">
@@ -61,11 +61,15 @@ export default async function Home() {
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-4">
-                  <h2 className="mb-2 line-clamp-2 text-lg font-semibold text-black dark:text-zinc-50">
-                    {product.title}
+                  <h2 className="mb-2 text-lg font-semibold text-black dark:text-zinc-50">
+                    {product.title.length > 50
+                      ? `${product.title.substring(0, 50)}...`
+                      : product.title}
                   </h2>
-                  <p className="mb-3 line-clamp-2 flex-1 text-sm text-zinc-600 dark:text-zinc-400">
-                    {product.description}
+                  <p className="mb-3 flex-1 text-sm text-zinc-600 dark:text-zinc-400">
+                    {product.description.length > 100
+                      ? `${product.description.substring(0, 100)}...`
+                      : product.description}
                   </p>
                   <div className="mt-auto flex items-center justify-between">
                     <span className="text-2xl font-bold text-black dark:text-zinc-50">
