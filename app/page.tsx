@@ -16,7 +16,7 @@ interface Product {
 async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch("https://fakestoreapi.com/products", {
-      cache: "no-store", // 确保获取最新数据
+      next: { revalidate: 60 }, // 每60秒重新验证一次
     });
     if (!res.ok) {
       throw new Error("Failed to fetch products");
